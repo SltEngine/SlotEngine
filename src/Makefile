@@ -6,7 +6,7 @@
 
 CC = g++
 CFLAGS = -W -Wall -ansi -pedantic
-EXEC = slotmachine
+EXEC = ../bin/slotmachine
 SRC = $(shell find . -name "*.cpp")
 OBJS = $(SRC:%.cpp=%.o)
 SUBDIRS = Symbols
