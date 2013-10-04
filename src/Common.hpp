@@ -10,6 +10,7 @@
  */
 
 #define CONFIG_FILE "config.txt"
+#define LINE_SHAPES_FILE "line_shapes.txt"
 
 #define ERR_LOAD_FILE 1
 

@@ -13,14 +13,14 @@
 #include "Config.hpp"
 #include "Common.hpp"
 
-// Singleton Instance
+// Singleton Instance set to 0 at start
 Config* Config::m_instance = 0;
 
 // Main contructor
 Config::Config()
 {
 	// Load all the config variables
-	LoadConfig();
+	m_loadError = !LoadConfig();
 	// One ref is using this instance now
 	m_numOfSingletonRef = 1;
 }
@@ -46,45 +46,49 @@ Config* Config::GetInst()
 }
 
 // Load config from txt file
-void Config::LoadConfig()
+// Returns false if load failed
+bool Config::LoadConfig()
 {
+	// Open the file
 	std::ifstream configFile;
 	configFile.open(CONFIG_FILE, std::ios::in);
 	
+	// If file is wrong => exit
 	if(!configFile.is_open() || !configFile.good())
 	{
-		m_loadError = true;
-		return;
+		return false;
 	}
 	
+	// Get the number of lines
 	configFile >> m_numberOfLines;
 	if(!configFile.good())
 	{
-		m_loadError = true;
-		return;
+		return false;
 	}
-
+	
+	// Get the number of symbols
 	configFile >> m_numberOfSymbols;
 	if(!configFile.good())
 	{
-		m_loadError = true;
-		return;
+		return false;
 	}
 
+	// Get the number of wheels
 	configFile >> m_numberOfWheels;
 	if(!configFile.good())
 	{
-		m_loadError = true;
-		return;
+		return false;
 	}
 
-	m_loadError = false;
+	return true;
 }
 
 // Delete the ref of the singleton
 void Config::DeleteRef()
 {
+	// Decrement the number of ref
 	m_numOfSingletonRef--;
+	// IF it is 0 => not used anymore => delete
 	if(m_numOfSingletonRef == 0)
 	{
 		delete this;

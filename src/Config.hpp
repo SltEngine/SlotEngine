@@ -15,7 +15,7 @@ class Config
 private:
 	// Singleton Instance
 	static Config* m_instance;
-	// Number of currently used singletons
+	// Number of currently used singleton refs
 	int m_numOfSingletonRef;	
 
 	// Number of lines in the slot machine
@@ -24,7 +24,7 @@ private:
 	int m_numberOfSymbols;
 	// Number of wheels
 	int m_numberOfWheels;
-	// Error during the loading of the file ?
+	// Error while loading of the file ?
 	bool m_loadError;
 
 	// Main contructor
@@ -32,7 +32,8 @@ private:
 	// Main destructor
 	~Config();
 	// Load config from txt file
-	void LoadConfig();
+	// Returns false if load failed
+	bool LoadConfig();
 public:
 	
 	// Get the instance of the singleton
