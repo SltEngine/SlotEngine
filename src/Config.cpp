@@ -102,9 +102,23 @@ const bool& Config::GetLoadErr()
 	return m_loadError;
 }
 
+// Get the number of wheels
+const int& Config::GetNumOfWheels()
+{
+	return m_numberOfWheels;
+}
+
+// Get the number of lines
+const int& Config::GetNumOfLines()
+{
+	return m_numberOfLines;
+}
+
 // FOR DEBUG : DISPLAY the values of the class of the config
 void Config::DebugPrint()
 {
+	std::cout << std::endl << "DISPLAYING CONFIG VALUES : " << std::endl << std::endl;
+	
 	std::cout << "Singleton Instance Number : " << m_instance << std::endl;
 	std::cout << "Number of currently used singletons : " << m_numOfSingletonRef << std::endl;	
 	std::cout << "Number of lines in the slot machine : " << m_numberOfLines << std::endl;

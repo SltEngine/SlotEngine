@@ -42,7 +42,10 @@ public:
 	void DeleteRef();
 	// Get the error flag
 	const bool& GetLoadErr();
-
+	// Get the number of wheels
+	const int& GetNumOfWheels();
+	// Get the number of lines
+	const int& GetNumOfLines();
 	// FOR DEBUG : DISPLAY the values of the class of the config
 	void DebugPrint();
 };

@@ -5,10 +5,16 @@
 #
 
 CC = g++
+
 CFLAGS = -W -Wall -ansi -pedantic
+#CFLAGS = -g 				#for DEBUG only
+
 EXEC = ../bin/slotmachine
+
 SRC = $(shell find . -name "*.cpp")
+
 OBJS = $(SRC:%.cpp=%.o)
+
 SUBDIRS = Symbols
 
 %.o : %.cpp

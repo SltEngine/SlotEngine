@@ -27,6 +27,11 @@ LineShapeManager::LineShapeManager()
 // Main destructor
 LineShapeManager::~LineShapeManager()
 {
+	// Delete all the lines
+	for(std::vector<LineShape*>::iterator line= m_lineShapes.begin(); line != m_lineShapes.end(); line++)
+	{
+		delete *line;
+	}
 }
 
 // Get the instance of the singleton
@@ -75,7 +80,10 @@ bool LineShapeManager::LoadLineShapes()
 			// Error occured during the line setting
 			delete newLineShape;
 			return false;
-		}	
+		}
+
+		// Save the line in the vector
+		m_lineShapes.push_back(newLineShape);	
 	}
 
 	// Load is OK
@@ -110,11 +118,11 @@ const bool& LineShapeManager::GetLoadErr()
 // FOR DEBUG : DISPLAY the values of the class
 void LineShapeManager::DebugPrint()
 {
-	/*std::cout << "Singleton Instance Number : " << m_instance << std::endl;
-	std::cout << "Number of currently used singletons : " << m_numOfSingletonRef << std::endl;	
-	std::cout << "Number of lines in the slot machine : " << m_numberOfLines << std::endl;
-	std::cout << "Number of symbols on one wheel : " << m_numberOfSymbols << std::endl;
-	std::cout << "Number of wheels : " <<  m_numberOfWheels << std::endl;
-	std::cout << "Load error flag : " << m_loadError << std::endl;*/
-	
+	std::cout << std::endl << "DISPLAYING ALL THE LINES VALUES : " << std::endl << std::endl;
+
+	// Display all the lines
+	for(std::vector<LineShape*>::iterator line= m_lineShapes.begin(); line != m_lineShapes.end(); line++)
+	{
+		(*line)->DebugPrint();
+	}
 }

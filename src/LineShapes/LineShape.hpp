@@ -14,6 +14,10 @@
 #include <vector>
 
 // A line is formed with several cells
+// 0,0 is top left corner
+// 0, maxY is bottom left corner
+// maxX, 0 is top right corner
+// maxX, maxY is bottom right corner
 typedef struct LineCell
 {
 	int x;
@@ -30,9 +34,13 @@ public:
 	LineShape();
 	// Main Destructor
 	~LineShape();
+
 	// Set the cells of the line
 	// Return false if input is wrong
 	bool SetLineCells(std::string lineInfo);
+
+	// FOR DEBUG : DISPLAY the values of the class
+	void DebugPrint();
 };
 
 #endif

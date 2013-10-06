@@ -19,7 +19,7 @@ int main(int argc, char**argv)
 	Config* config = Config::GetInst();
 	if(config->GetLoadErr())
 	{	
-		std::cerr << "Error : Could not load " << CONFIG_FILE << "." << std::endl << "Closing application." << std::endl;
+		std::cerr << "Error while loading " << CONFIG_FILE << "." << std::endl << "Closing application." << std::endl;
 		
 		// Delete the config Ref
 		config->DeleteRef();
@@ -34,13 +34,16 @@ int main(int argc, char**argv)
 	LineShapeManager* LSM = LineShapeManager::GetInst();
 	if(LSM->GetLoadErr())
 	{
-		std::cerr << "Error : Could not load " << LINE_SHAPES_FILE << "." << std::endl << "Closing application." << std::endl;
+		std::cerr << "Error while loading " << LINE_SHAPES_FILE << "." << std::endl << "Closing application." << std::endl;
 		
 		// Delete the LSM Ref
 		LSM->DeleteRef();
 
 		return ERR_LOAD_FILE;
 	}
+
+	// Display for debug
+	LSM->DebugPrint();
 
 	return 0;
 }
