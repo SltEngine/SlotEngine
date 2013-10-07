@@ -14,9 +14,7 @@ class Config
 {
 private:
 	// Singleton Instance
-	static Config* m_instance;
-	// Number of currently used singleton refs
-	int m_numOfSingletonRef;	
+	static Config* m_instance;	
 
 	// Number of lines in the slot machine
 	int m_numberOfLines;
@@ -38,8 +36,8 @@ public:
 	
 	// Get the instance of the singleton
 	static Config* GetInst();
-	// Delete the ref of the singleton
-	void DeleteRef();
+	// Delete the singleton
+	void DeleteSingleton();
 	// Get the error flag
 	const bool& GetLoadErr();
 	// Get the number of wheels

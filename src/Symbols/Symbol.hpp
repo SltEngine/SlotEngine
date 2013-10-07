@@ -9,10 +9,7 @@
  * @date : 04/10/2013
  */
 
-/**
- * It contains the rules, id and multiplier of the symbol
- * This is an ABSTRACT class !
- */
+#include <iostream>
 
 class Symbol
 {
@@ -21,23 +18,38 @@ private:
 	bool m_ruleFollowsLines;
 	// Symbol ID
 	int m_id;
-	// Multipliers
+	// Gain Multipliers
 	int *m_multipliers;
-protected:
-	// Set the multiplier
-	virtual void SetMultiplier() = 0;	
 public:
 	// Main contructor
 	Symbol(int id);
 	// Main destructor
 	virtual ~Symbol();
 
+	// Set the symbol multiplier
+	// Return false if input is wrong
+	bool SetMultiplier(const char* info);
+
 	/**** Getters ****/
 	const int& GetId();
 	const bool& RuleIsFollowingLines();
+	// Returns -1 if wrong argument
+	int GetMultiplier(int numOfOccurences);
 	/**** END Getters ****/
 	
+	// FOR DEBUG : DISPLAY the values of the class
+	void DebugPrint();
 };
+
+// Type of the symbol
+typedef enum SymbolType
+{
+	NORMAL,
+	FREESPINS,
+	BONUS,
+	WILD,
+	NUMOFSYMBOLTYPES	// WARNING! Please let this value always at the end to know the number of symbol types
+}SymbolType;
 
 
 #endif

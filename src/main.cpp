@@ -11,6 +11,7 @@
 #include "Config.hpp"
 #include "Common.hpp"
 #include "LineShapes/LineShapeManager.hpp"
+#include "Symbols/SymbolManager.hpp"
 
 // Entry point of the slot machine engine
 int main(int argc, char**argv)
@@ -19,10 +20,10 @@ int main(int argc, char**argv)
 	Config* config = Config::GetInst();
 	if(config->GetLoadErr())
 	{	
-		std::cerr << "Error while loading " << CONFIG_FILE << "." << std::endl << "Closing application." << std::endl;
+		std::cerr << std::endl << "Error while loading " << CONFIG_FILE << "." << std::endl << "Closing application." << std::endl;
 		
-		// Delete the config Ref
-		config->DeleteRef();
+		// Delete the config Singleton
+		config->DeleteSingleton();
 
 		return ERR_LOAD_FILE;
 	}
@@ -34,10 +35,13 @@ int main(int argc, char**argv)
 	LineShapeManager* LSM = LineShapeManager::GetInst();
 	if(LSM->GetLoadErr())
 	{
-		std::cerr << "Error while loading " << LINE_SHAPES_FILE << "." << std::endl << "Closing application." << std::endl;
+		std::cerr << std::endl << "Error while loading " << LINE_SHAPES_FILE << "." << std::endl << "Closing application." << std::endl;
 		
-		// Delete the LSM Ref
-		LSM->DeleteRef();
+		// Delete the LSM Singleton
+		LSM->DeleteSingleton();
+
+		// Delete the config Singleton
+		config->DeleteSingleton();
 
 		return ERR_LOAD_FILE;
 	}
@@ -45,5 +49,31 @@ int main(int argc, char**argv)
 	// Display for debug
 	LSM->DebugPrint();
 
+	// Load Symbol Manager
+	SymbolManager* SM = SymbolManager::GetInst();
+	if(SM->GetLoadErr())
+	{
+		std::cerr << std::endl << "Error while loading " << SYMBOLS_FILE << "." << std::endl << "Closing application." << std::endl;
+		
+		// Delete the SM Singleton
+		SM->DeleteSingleton();
+
+		// Delete the LSM Singleton
+		LSM->DeleteSingleton();
+
+		// Delete the config Singleton
+		config->DeleteSingleton();
+
+		return ERR_LOAD_FILE;
+	}
+
+	// Display for debug
+	SM->DebugPrint();
+
+	// Delete all Singletons at the end of the main
+	config->DeleteSingleton();
+	LSM->DeleteSingleton();
+	SM->DeleteSingleton();
+	
 	return 0;
 }

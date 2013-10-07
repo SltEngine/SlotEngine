@@ -21,8 +21,6 @@ class LineShapeManager
 private:
 	// Singleton Instance
 	static LineShapeManager* m_instance;
-	// Number of currently used singleton ref
-	int m_numOfSingletonRef;
 	
 	// Vector containing all the line shapes
 	std::vector<LineShape*> m_lineShapes;
@@ -40,8 +38,8 @@ private:
 public:
 	// Get the instance of the singleton
 	static LineShapeManager* GetInst();
-	// Delete the ref of the singleton
-	void DeleteRef();
+	// Delete the singleton
+	void DeleteSingleton();
 
 	// Get the line shapes	
 	const std::vector<LineShape*>& GetLineShapes();

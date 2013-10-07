@@ -21,8 +21,6 @@ Config::Config()
 {
 	// Load all the config variables
 	m_loadError = !LoadConfig();
-	// One ref is using this instance now
-	m_numOfSingletonRef = 1;
 }
 
 // Main destructor
@@ -38,10 +36,7 @@ Config* Config::GetInst()
 	{
 		m_instance = new Config();
 	}
-	else
-	{	// Instancied => increased number of ref
-		m_instance->m_numOfSingletonRef++;
-	}
+
 	return m_instance;
 }
 
@@ -83,13 +78,11 @@ bool Config::LoadConfig()
 	return true;
 }
 
-// Delete the ref of the singleton
-void Config::DeleteRef()
+// Delete the the singleton
+void Config::DeleteSingleton()
 {
-	// Decrement the number of ref
-	m_numOfSingletonRef--;
-	// IF it is 0 => not used anymore => delete
-	if(m_numOfSingletonRef == 0)
+	// IF it is  instancied => delete
+	if(m_instance == 0)
 	{
 		delete this;
 		m_instance = 0;
@@ -119,8 +112,7 @@ void Config::DebugPrint()
 {
 	std::cout << std::endl << "DISPLAYING CONFIG VALUES : " << std::endl << std::endl;
 	
-	std::cout << "Singleton Instance Number : " << m_instance << std::endl;
-	std::cout << "Number of currently used singletons : " << m_numOfSingletonRef << std::endl;	
+	std::cout << "Singleton Instance Number : " << m_instance << std::endl;	
 	std::cout << "Number of lines in the slot machine : " << m_numberOfLines << std::endl;
 	std::cout << "Number of symbols on one wheel : " << m_numberOfSymbols << std::endl;
 	std::cout << "Number of wheels : " <<  m_numberOfWheels << std::endl;

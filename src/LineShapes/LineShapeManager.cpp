@@ -18,10 +18,8 @@ LineShapeManager* LineShapeManager::m_instance = 0;
 // Main contructor
 LineShapeManager::LineShapeManager()
 {
-	// Load all the config variables
+	// Load all the line shapes
 	m_loadError = !LoadLineShapes();
-	// One ref is using this instance now
-	m_numOfSingletonRef = 1;
 }
 
 // Main destructor
@@ -42,10 +40,7 @@ LineShapeManager* LineShapeManager::GetInst()
 	{
 		m_instance = new LineShapeManager();
 	}
-	else
-	{	// Instancied => increased number of ref
-		m_instance->m_numOfSingletonRef++;
-	}
+	
 	return m_instance;
 }
 
@@ -77,9 +72,10 @@ bool LineShapeManager::LoadLineShapes()
 		// Set cells of the shape
 		if(newLineShape->SetLineCells(line) == false)
 		{	
-			// Error occured during the line setting
+			// Error occured during this line setting
 			delete newLineShape;
-			return false;
+			// Skip it
+			continue;
 		}
 
 		// Save the line in the vector
@@ -90,13 +86,11 @@ bool LineShapeManager::LoadLineShapes()
 	return true;
 }
 
-// Delete the ref of the singleton
-void LineShapeManager::DeleteRef()
+// Delete the singleton
+void LineShapeManager::DeleteSingleton()
 {
-	// Decrement number of ref
-	m_numOfSingletonRef--;
-	// If ref is 0 => not used anymore => delete
-	if(m_numOfSingletonRef == 0)
+	// If singleton is instancied
+	if(m_instance != 0)
 	{
 		delete this;
 		m_instance = 0;

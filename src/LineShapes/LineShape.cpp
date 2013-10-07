@@ -43,7 +43,14 @@ bool LineShape::SetLineCells(std::string lineInfo)
 	
 	// Get config pointer
 	Config* config = Config::GetInst();
-
+	
+	// The number of cell is wrong => error
+	if(config->GetNumOfWheels() != cellValues->size())
+	{
+		DeleteVector(&cellValues);
+		return false;
+	}
+	
 	// Iterate on cell values
 	std::vector<char*>::iterator cellValue;
 	for(cellValue = cellValues->begin(); cellValue != cellValues->end(); cellValue++)
@@ -56,7 +63,6 @@ bool LineShape::SetLineCells(std::string lineInfo)
 		{
 			DeleteVector(&cellInfos);
 			DeleteVector(&cellValues);
-			config->DeleteRef();
 			return false;
 		}
 
@@ -70,7 +76,6 @@ bool LineShape::SetLineCells(std::string lineInfo)
 		{
 			DeleteVector(&cellInfos);
 			DeleteVector(&cellValues);
-			config->DeleteRef();
 			return false;
 		}
 
