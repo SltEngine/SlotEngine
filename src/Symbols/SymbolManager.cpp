@@ -153,6 +153,22 @@ const bool& SymbolManager::GetLoadErr()
 	return m_loadError;
 }
 
+// Get a symbol with the id
+const Symbol* SymbolManager::GetSymbol(int id)
+{
+	// Search for the symbol
+	std::map<int, Symbol*>::iterator reqItem = m_symbols.find(id);
+
+	// If not found
+	if(reqItem == m_symbols.end())
+	{
+		return NULL;
+	}
+	
+	// Found
+	return reqItem->second;
+}
+
 // FOR DEBUG : DISPLAY all the symbol values
 void SymbolManager::DebugPrint()
 {

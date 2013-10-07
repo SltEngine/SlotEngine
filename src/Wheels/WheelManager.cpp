@@ -8,7 +8,7 @@
 
 #include "WheelManager.hpp"
 #include "../Common.hpp"
-#include "../Utils/Strings.hpp"
+#include "../Config.hpp"
 
 #include <fstream>
 #include <stdlib.h>
@@ -65,7 +65,26 @@ bool WheelManager::LoadWheels()
 		// Get wheels info
 		std::string line;
 	 	std::getline(wheelsFile, line);
-	
+		
+		// Create new wheel
+		Wheel* newWheel = new Wheel();
+
+		// Fill wheel values
+		if(newWheel->SetSymbols(line) == false)
+		{
+			delete newWheel;
+			continue;
+		}
+
+		// Save the new wheel
+		m_wheels.push_back(newWheel);
+	}
+
+	// Check if there are enough wheels
+	if(m_wheels.size() != Config::GetInst()->GetNumOfWheels())
+	{
+		std::cerr << "Expected " << Config::GetInst()->GetNumOfWheels() << " wheels. Had " << m_wheels.size() << " wheels."<< std::endl;
+		return false;
 	}
 
 	// Load is OK

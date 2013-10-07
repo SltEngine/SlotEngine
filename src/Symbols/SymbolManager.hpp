@@ -38,6 +38,8 @@ public:
 
 	// Get the error flag
 	const bool& GetLoadErr();
+	// Get a symbol with the id
+	const Symbol* GetSymbol(int id);
 
 	// FOR DEBUG : DISPLAY all the symbol values
 	void DebugPrint();

@@ -24,7 +24,7 @@ public:
 
 	// Set symbols on the wheel
 	// Return false if input is wrong
-	bool SetSymbols(const char* info);
+	bool SetSymbols(std::string info);
 
 	/**** Getters ****/
 	// Returns -1 if wrong argument
