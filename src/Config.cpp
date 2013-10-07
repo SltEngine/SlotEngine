@@ -107,6 +107,12 @@ const int& Config::GetNumOfLines()
 	return m_numberOfLines;
 }
 
+// Get the number of symbols per wheel
+const int& Config::GetNumOfSymbols()
+{
+	return m_numberOfSymbols;
+}
+
 // FOR DEBUG : DISPLAY the values of the class of the config
 void Config::DebugPrint()
 {

@@ -44,6 +44,8 @@ public:
 	const int& GetNumOfWheels();
 	// Get the number of lines
 	const int& GetNumOfLines();
+	// Get the number of symbols per wheel
+	const int& GetNumOfSymbols();
 	// FOR DEBUG : DISPLAY the values of the class of the config
 	void DebugPrint();
 };

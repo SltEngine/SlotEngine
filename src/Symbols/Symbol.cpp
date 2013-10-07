@@ -64,7 +64,23 @@ void Symbol::DebugPrint()
 	// Display id
 	std::cout << "Id = " << m_id << std::endl;
 	// Display type
-	std::cout << "Type = " << m_type << std::endl;
+	std::cout << "Type = ";
+	switch (m_type)
+	{
+		case NORMAL:
+		std::cout << "NORMAL";
+		break;
+		case FREESPINS:
+		std::cout << "FREESPINS";
+		break;
+		case BONUS:
+		std::cout << "BONUS";
+		break;
+		case WILD:
+		std::cout << "WILD";
+		break;
+	}
+	std::cout << std::endl;
 	// Multipliers
 	std::cout << "Multipliers = ";
 	// Iterate on multiplier values
@@ -91,7 +107,7 @@ const SymbolType& Symbol::GetType()
 int Symbol::GetMultiplier(int numOfOccurences)
 {
 	// Error in argument
-	if(numOfOccurences >= Config::GetInst()->GetNumOfWheels())
+	if(numOfOccurences < 0 || numOfOccurences >= Config::GetInst()->GetNumOfWheels())
 	{
 		return -1;
 	}

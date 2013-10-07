@@ -12,6 +12,7 @@
 #include "Common.hpp"
 #include "LineShapes/LineShapeManager.hpp"
 #include "Symbols/SymbolManager.hpp"
+#include "Wheels/WheelManager.hpp"
 
 // Entry point of the slot machine engine
 int main(int argc, char**argv)
@@ -70,10 +71,35 @@ int main(int argc, char**argv)
 	// Display for debug
 	SM->DebugPrint();
 
+	// Load Wheel Manager
+	WheelManager* WM = WheelManager::GetInst();
+	if(WM->GetLoadErr())
+	{
+		std::cerr << std::endl << "Error while loading " << WHEELS_FILE << "." << std::endl << "Closing application." << std::endl;
+		
+		// Delete the WM Singleton
+		WM->DeleteSingleton();
+
+		// Delete the SM Singleton
+		SM->DeleteSingleton();
+
+		// Delete the LSM Singleton
+		LSM->DeleteSingleton();
+
+		// Delete the config Singleton
+		config->DeleteSingleton();
+		
+		return ERR_LOAD_FILE;
+	}
+	
+	// Display for debug
+	WM->DebugPrint();
+
 	// Delete all Singletons at the end of the main
 	config->DeleteSingleton();
 	LSM->DeleteSingleton();
 	SM->DeleteSingleton();
+	WM->DeleteSingleton();
 	
 	return 0;
 }

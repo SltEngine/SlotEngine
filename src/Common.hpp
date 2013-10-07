@@ -12,6 +12,7 @@
 #define CONFIG_FILE "config.txt"
 #define LINE_SHAPES_FILE "line_shapes.txt"
 #define SYMBOLS_FILE "symbols.txt"
+#define WHEELS_FILE "wheels.txt"
 
 #define ERR_LOAD_FILE 1
 

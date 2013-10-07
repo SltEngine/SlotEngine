@@ -26,7 +26,7 @@ SymbolManager::SymbolManager()
 // Main destructor
 SymbolManager::~SymbolManager()
 {
-	// Delete all the lines
+	// Delete all the symbols
 	for(std::map<int, Symbol*>::iterator symbol= m_symbols.begin(); symbol != m_symbols.end(); symbol++)
 	{
 		delete symbol->second;
@@ -52,7 +52,7 @@ bool SymbolManager::LoadSymbols()
 	std::ifstream symbolsFile;
 	symbolsFile.open(SYMBOLS_FILE, std::ios::in);
 	
-	// If lineShapesFile is not OK => exit
+	// If symbolsFile is not OK => exit
 	if(!symbolsFile.is_open() || !symbolsFile.good())
 	{
 		return false;
