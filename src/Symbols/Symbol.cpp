@@ -15,15 +15,15 @@
 #include <stdlib.h>
 
 // Main contructor
-Symbol::Symbol(int id)
+Symbol::Symbol(int id, SymbolType type)
 {
 	// Instanciate multipliers and set to zero
 	m_multipliers = new int[Config::GetInst()->GetNumOfWheels()];
 	memset(m_multipliers, 0, Config::GetInst()->GetNumOfWheels()*sizeof(int));
 	// Id of the symbol
 	m_id = id;
-	// It has to work on lines since it is a basic symbol
-	m_ruleFollowsLines = true;
+	// Set the type
+	m_type = type;
 }
 
 // Main destructor
@@ -64,7 +64,7 @@ void Symbol::DebugPrint()
 	// Display id
 	std::cout << "Id = " << m_id << std::endl;
 	// Display type
-	std::cout << "Type = NORMAL " << std::endl;
+	std::cout << "Type = " << m_type << std::endl;
 	// Multipliers
 	std::cout << "Multipliers = ";
 	// Iterate on multiplier values
@@ -82,9 +82,9 @@ const int& Symbol::GetId()
 	return m_id;
 }
 
-const bool& Symbol::RuleIsFollowingLines()
+const SymbolType& Symbol::GetType()
 {
-	return m_ruleFollowsLines;
+	return m_type;
 }
 
 // Returns -1 if wrong argument

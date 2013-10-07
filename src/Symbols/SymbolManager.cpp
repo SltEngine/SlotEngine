@@ -94,27 +94,39 @@ bool SymbolManager::LoadSymbols()
 		// No more needed
 		DeleteVector(&idntypeSplitted);
 		
-		// Create new Symbol
-		Symbol* newSymbol = new Symbol(id);
-		
-		// Check if it is OK		
-		if(idntype->size() != 2)
+		// Check if symbol is already present and type is correct	
+		if(m_symbols.find(id) != m_symbols.end() || type >= NUMOFSYMBOLTYPES)
 		{
 			DeleteVector(&idntype);
-			continue;
+			return false;
 		}
+		
+		// Create new Symbol
+		Symbol* newSymbol = new Symbol(id, type);
+		
+		// If the symbol has multipliers
+		if(type != WILD)
+		{
+			// Check if input is correct	
+			if(idntype->size() != 2)
+			{
+				DeleteVector(&idntype);
+				delete newSymbol;
+				continue;
+			}
 
-		// Set symbol info
-		if(newSymbol->SetMultiplier((*idntype)[1]) == false)
-		{	
-			// Error occured during the line setting
-			delete newSymbol;
-			DeleteVector(&idntype);
-			continue;
+			// Set symbol multiplier
+			if(newSymbol->SetMultiplier((*idntype)[1]) == false)
+			{	
+				// Error occured during the line setting
+				delete newSymbol;
+				DeleteVector(&idntype);
+				continue;
+			}
 		}
 
 		// Save the line in the map
-		m_symbols[newSymbol->GetId()] = newSymbol;
+		m_symbols[id] = newSymbol;
 
 		// Clean memory
 		DeleteVector(&idntype);	
