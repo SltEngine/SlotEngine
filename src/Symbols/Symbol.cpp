@@ -104,14 +104,14 @@ const SymbolType& Symbol::GetType()
 }
 
 // Returns -1 if wrong argument
-int Symbol::GetMultiplier(int numOfOccurences)
+int Symbol::GetMultiplier(int numOfOccurrences)
 {
 	// Error in argument
-	if(numOfOccurences < 0 || numOfOccurences >= Config::GetInst()->GetNumOfWheels())
+	if(numOfOccurrences < 0 || numOfOccurrences >= Config::GetInst()->GetNumOfWheels())
 	{
 		return -1;
 	}
-	return m_multipliers[numOfOccurences];
+	return m_multipliers[numOfOccurrences];
 }
 
 /**** END Getters ****/

@@ -38,7 +38,9 @@ public:
 
 	// Get the error flag
 	const bool& GetLoadErr();
-
+	// Get a wheel with its position
+	// Return NULL is position is wrong
+	Wheel* GetWheel(int position);
 	// FOR DEBUG : DISPLAY all the wheel values
 	void DebugPrint();
 };

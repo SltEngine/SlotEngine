@@ -44,7 +44,7 @@ public:
 	const int& GetId();
 	const SymbolType& GetType();
 	// Returns -1 if wrong argument
-	int GetMultiplier(int numOfOccurences);
+	int GetMultiplier(int numOfOccurrences);
 	/**** END Getters ****/
 	
 	// FOR DEBUG : DISPLAY the values of the class

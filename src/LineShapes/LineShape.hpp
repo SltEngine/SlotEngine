@@ -38,6 +38,9 @@ public:
 	// Set the cells of the line
 	// Return false if input is wrong
 	bool SetLineCells(std::string lineInfo);
+	
+	// Get line cell
+	std::vector<LineCell*>& GetLineCells();
 
 	// FOR DEBUG : DISPLAY the values of the class
 	void DebugPrint();

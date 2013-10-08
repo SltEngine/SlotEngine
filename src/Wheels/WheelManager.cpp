@@ -108,6 +108,19 @@ const bool& WheelManager::GetLoadErr()
 	return m_loadError;
 }
 
+// Get a wheel with its position
+// Return NULL is position is wrong
+Wheel* WheelManager::GetWheel(int position)
+{
+	// Check if position is OK
+	if(position < 0 || position >= Config::GetInst()->GetNumOfWheels())
+	{
+		return NULL;
+	}
+	
+	return m_wheels[position];
+}
+
 // FOR DEBUG : DISPLAY all the wheel values
 void WheelManager::DebugPrint()
 {

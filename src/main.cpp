@@ -7,16 +7,26 @@
  */
 
 #include <iostream>
+#include <ctime>
+#include <cstdlib>
+#include <sys/time.h>
 
 #include "Config.hpp"
 #include "Common.hpp"
 #include "LineShapes/LineShapeManager.hpp"
 #include "Symbols/SymbolManager.hpp"
 #include "Wheels/WheelManager.hpp"
+#include "Engine.hpp"
 
 // Entry point of the slot machine engine
 int main(int argc, char**argv)
-{
+{	
+	// Reset the random seed at start
+	// Take the time in µsec in order to get different result all the time
+	timeval tv;
+	gettimeofday(&tv, NULL);
+	std::srand(tv.tv_sec * 1000000 + tv.tv_usec);
+
 	// Load main configuration first
 	Config* config = Config::GetInst();
 	if(config->GetLoadErr())
@@ -95,11 +105,19 @@ int main(int argc, char**argv)
 	// Display for debug
 	WM->DebugPrint();
 
+	// Compute the output now
+	Engine* engine = new Engine(100);
+	
+	// Display for debug
+	engine->DebugPrint();
+
 	// Delete all Singletons at the end of the main
 	config->DeleteSingleton();
 	LSM->DeleteSingleton();
 	SM->DeleteSingleton();
 	WM->DeleteSingleton();
-	
+
+	// Clean memory
+	delete engine;
 	return 0;
 }

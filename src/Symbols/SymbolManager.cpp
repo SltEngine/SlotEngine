@@ -154,7 +154,7 @@ const bool& SymbolManager::GetLoadErr()
 }
 
 // Get a symbol with the id
-const Symbol* SymbolManager::GetSymbol(int id)
+Symbol* SymbolManager::GetSymbol(int id)
 {
 	// Search for the symbol
 	std::map<int, Symbol*>::iterator reqItem = m_symbols.find(id);

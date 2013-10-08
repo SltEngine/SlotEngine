@@ -93,6 +93,12 @@ bool LineShape::SetLineCells(std::string lineInfo)
 	return true;
 }
 
+// Get line cell
+std::vector<LineCell*>& LineShape::GetLineCells()
+{
+	return m_cells;
+}
+
 // FOR DEBUG : DISPLAY the values of the class
 void LineShape::DebugPrint()
 {
