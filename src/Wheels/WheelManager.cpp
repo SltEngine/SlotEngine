@@ -81,7 +81,7 @@ bool WheelManager::LoadWheels()
 	}
 
 	// Check if there are enough wheels
-	if(m_wheels.size() != Config::GetInst()->GetNumOfWheels())
+	if((int)m_wheels.size() != Config::GetInst()->GetNumOfWheels())
 	{
 		std::cerr << "Expected " << Config::GetInst()->GetNumOfWheels() << " wheels. Had " << m_wheels.size() << " wheels."<< std::endl;
 		return false;

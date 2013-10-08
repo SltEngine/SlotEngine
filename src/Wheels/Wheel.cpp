@@ -33,14 +33,14 @@ bool Wheel::SetSymbols(std::string info)
 	std::vector<char*>* symbolsIds = SplitString(info, ',');
 	
 	// Check if there are enough args
-	if(symbolsIds->size() != Config::GetInst()->GetNumOfSymbols())
+	if((int)symbolsIds->size() != Config::GetInst()->GetNumOfSymbols())
 	{
 		DeleteVector(&symbolsIds);
 		return false;
 	}
 	
 	// Fill wheel with symbol ids
-	for(int i = 0; i < symbolsIds->size(); i++)
+	for(int i = 0; i < (int)symbolsIds->size(); i++)
 	{
 		// Get the symbol value
 		int value = atoi((*symbolsIds)[i]);

@@ -10,6 +10,7 @@
 #include <ctime>
 #include <cstdlib>
 #include <sys/time.h>
+#include <string.h>
 
 #include "Config.hpp"
 #include "Common.hpp"
@@ -18,9 +19,59 @@
 #include "Wheels/WheelManager.hpp"
 #include "Engine.hpp"
 
+// Trace enabled ?
+static bool g_trace = false;
+
+// Display instruction if args are wrong
+void DisplayInfos(char* progName)
+{
+	std::cout << "To use this program please use " << progName << " <money> <flags> or " << progName << " <flags> <money>" << std::endl;
+	std::cout << "Money should be a positive number !" << std::endl;
+	std::cout << "Flags : " << std::endl << " no flags : it display standart output which can be used in the php page." << std::endl;
+	std::cout << "-t : to display trace (Warning !! You cannot use this for your php page)." << std::endl;
+}
+
 // Entry point of the slot machine engine
 int main(int argc, char**argv)
 {	
+	// Money input
+	int money = 0;
+
+	// Check argc and set flags
+	if(argc <= 1)
+	{
+		DisplayInfos(argv[0]);
+		return 0;
+	}
+	else
+	{
+		// Check for flag and money input
+		for(int i = 1; i < argc; i++)
+		{
+			// Flag input
+			if(argv[i][0] == '-')
+			{	
+				// Trace enabled
+				if(strncmp(argv[i], "-t", 2) == 0)
+				{
+					g_trace = true;
+				}
+			}
+			// Money input
+			else
+			{
+				money = atoi(argv[i]);
+			}
+		}
+	}
+
+	// Check money value
+	if(money <= 0)
+	{
+		DisplayInfos(argv[0]);
+		return 0;
+	}
+
 	// Reset the random seed at start
 	// Take the time in µsec in order to get different result all the time
 	timeval tv;
@@ -40,7 +91,10 @@ int main(int argc, char**argv)
 	}
 
 	// Display for debug
-	config->DebugPrint();
+	if(g_trace)
+	{
+		config->DebugPrint();
+	}
 
 	// Load Line Shape Manager Then
 	LineShapeManager* LSM = LineShapeManager::GetInst();
@@ -58,7 +112,10 @@ int main(int argc, char**argv)
 	}
 
 	// Display for debug
-	LSM->DebugPrint();
+	if(g_trace)
+	{
+		LSM->DebugPrint();
+	}
 
 	// Load Symbol Manager
 	SymbolManager* SM = SymbolManager::GetInst();
@@ -79,7 +136,10 @@ int main(int argc, char**argv)
 	}
 
 	// Display for debug
-	SM->DebugPrint();
+	if(g_trace)
+	{
+		SM->DebugPrint();
+	}
 
 	// Load Wheel Manager
 	WheelManager* WM = WheelManager::GetInst();
@@ -103,13 +163,23 @@ int main(int argc, char**argv)
 	}
 	
 	// Display for debug
-	WM->DebugPrint();
+	if(g_trace)
+	{
+		WM->DebugPrint();
+	}
 
 	// Compute the output now
-	Engine* engine = new Engine(100);
+	Engine* engine = new Engine(money);
 	
 	// Display for debug
-	engine->DebugPrint();
+	if(g_trace)
+	{
+		engine->DebugPrint();
+		engine->SendResultExplanation();
+	}
+
+	// Display the output for php page
+	engine->SendResult();
 
 	// Delete all Singletons at the end of the main
 	config->DeleteSingleton();

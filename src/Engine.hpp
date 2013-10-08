@@ -19,6 +19,9 @@ private:
 	// Money that the player played
 	int m_money;
 	// Wheel positions
+	// The position represent the top symbol of the wheel
+	// If position is 5 for exemple it means that the symbol 
+	// which is at the position 5 on the wheel is at the first line
 	int* m_wheelPositions;
 	// Global gain multiplier
 	int m_globalGainMultiplier;
@@ -26,6 +29,10 @@ private:
 	std::vector<LineShape*> m_winningLines;
 	// Winning Line Gains
 	std::vector<int> m_lineGains;
+	// Bonus
+	int m_bonus;
+	// Free spins
+	int m_freeSpins;
 
 	// Set the wheel positions randomly
 	void SetWheelPositions();
@@ -37,8 +44,12 @@ public:
 	// Main destructor
 	~Engine();
 
-	// FOR DEBUG : DISPLAY the values of the class of the config
+	// FOR DEBUG : DISPLAY the values of the engine
 	void DebugPrint();
+	// Print the result out
+	void SendResult();
+	// Print the result out explanation
+	void SendResultExplanation();
 };
 
 

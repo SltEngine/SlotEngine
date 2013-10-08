@@ -6,8 +6,8 @@
 
 CC = g++
 
-#CFLAGS = -W -Wall -ansi -pedantic
-CFLAGS = -g 				#for DEBUG only
+CFLAGS = -W -Wall -ansi -pedantic -o2
+#CFLAGS = -g 				#for DEBUG only
 
 EXEC = ../bin/slotmachine
 

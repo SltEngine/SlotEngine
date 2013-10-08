@@ -43,13 +43,13 @@ bool Symbol::SetMultiplier(const char* info)
 	Config* config = Config::GetInst();
 	
 	// The number of cell is wrong => error
-	if(config->GetNumOfWheels() != multipliers->size())
+	if(config->GetNumOfWheels() != (int)multipliers->size())
 	{
 		DeleteVector(&multipliers);
 	}
 	
 	// Save multiplier values
-	for(int i = 0; i< multipliers->size(); i++)
+	for(int i = 0; i < (int)multipliers->size(); i++)
 	{
 		m_multipliers[i] = atoi((*multipliers)[i]);
 	}
@@ -79,6 +79,9 @@ void Symbol::DebugPrint()
 		case WILD:
 		std::cout << "WILD";
 		break;
+		default:
+		std::cerr << "WRONG TYPE:" << std::endl;
+		return;
 	}
 	std::cout << std::endl;
 	// Multipliers

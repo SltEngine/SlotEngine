@@ -23,7 +23,8 @@ Engine::Engine(int moneyInput)
 	m_money = moneyInput;
 	m_wheelPositions = new int[Config::GetInst()->GetNumOfWheels()];
 	SetWheelPositions();
-
+	
+	m_bonus = m_freeSpins = 0;
 	// Update the global gain multiplier
 	m_globalGainMultiplier = 0;
  	ComputeGainMultiplier();
@@ -44,7 +45,7 @@ void Engine::SetWheelPositions()
 	}
 }
 
-// FOR DEBUG : DISPLAY the values of the class of the config
+// FOR DEBUG : DISPLAY the values of the engine
 void Engine::DebugPrint()
 {
 	std::cout << std::endl << "ENGINE OUTPUTS " << std::endl << std::endl;
@@ -64,13 +65,15 @@ void Engine::DebugPrint()
 		std::cout << std::endl;
 	}
 	std::cout << std::endl << "Gain multiplier " << m_globalGainMultiplier << std::endl;
-	std::cout << "Total gain " << (int)(m_money * m_globalGainMultiplier) << std::endl;
+	std::cout << "Total gain " << (int)(m_money * (m_bonus + m_globalGainMultiplier)) << std::endl;
 	std::cout << std::endl << "Winning Lines :" << std::endl;
-	for(int i = 0; i < m_winningLines.size(); i++)
+	for(int i = 0; i < (int)m_winningLines.size(); i++)
 	{
 		m_winningLines[i]->DebugPrint();
-		std::cout << "Line gain = " << m_lineGains[i] << std::endl;
+		std::cout << " gain = " << m_lineGains[i] << std::endl;
 	}
+	std::cout << "Bonus : " << m_bonus << std::endl;
+	std::cout << "Free spins: " << m_freeSpins << std::endl;
 }
 
 // Update the global gain multiplier
@@ -104,6 +107,12 @@ void Engine::ComputeGainMultiplier()
 		{	
 			// Get Wheel
 			Wheel * wheel = WheelManager::GetInst()->GetWheel((*cell)->x);
+			if(wheel == NULL)
+			{
+				std::cerr << "Error in Engine ComputeGainMultiplier, could not get correct wheel" << std::endl;
+				return;
+			}
+
 			// Get Symbol id
 			int symbolId = wheel->GetSymbolId((m_wheelPositions[(*cell)->x] + (*cell)->y) % Config::GetInst()->GetNumOfSymbols());
 			
@@ -158,4 +167,102 @@ void Engine::ComputeGainMultiplier()
 		// Reset num of occurrences
 		std::memset(numOfOccurrences, 0, Config::GetInst()->GetNumOfSymbols()* sizeof(int));
 	}
+
+	// Set Bonus & Free Spins
+	for(int k = 0; k <  Config::GetInst()->GetNumOfLines(); k++)
+	{
+		for(int i = 0; i < Config::GetInst()->GetNumOfWheels(); i++)
+		{
+			// Get Wheel
+			Wheel * wheel = WheelManager::GetInst()->GetWheel(i);
+			if(wheel == NULL)
+			{
+				std::cerr << "Error in Engine ComputeGainMultiplier, could not get correct wheel" << std::endl;
+				return;
+			}
+
+			// Get symbol id first
+			int symbolID = wheel->GetSymbolId((m_wheelPositions[i] + k) % Config::GetInst()->GetNumOfSymbols());
+
+			// Get the symbol
+			Symbol* currentSymbol = SymbolManager::GetInst()->GetSymbol(symbolID);
+			if(currentSymbol == NULL)
+			{
+				std::cerr << "Error in ComputeGainMultiplier. Symbol not found " << symbolID << std::endl;
+				return;
+			}
+
+			// Normal type => increment the current occurrence
+			if(currentSymbol->GetType() == FREESPINS)
+			{
+				numberOfFS++;
+				m_freeSpins = currentSymbol->GetMultiplier(numberOfFS - 1);
+			}
+			else if(currentSymbol->GetType() == BONUS)
+			{
+				numberOfBonus++;
+				m_bonus = currentSymbol->GetMultiplier(numberOfBonus - 1);
+			}
+		}
+	}
+}
+
+// Print the result out
+void Engine::SendResult()
+{
+	// Write position of the wheels first
+	for(int i = 0; i < Config::GetInst()->GetNumOfWheels(); i++)
+	{
+		Wheel * wheel = WheelManager::GetInst()->GetWheel(i);
+		if(wheel == NULL)
+		{
+			std::cerr << "Error in Engine DebugPrint, could not get correct wheel" << std::endl;
+			return;
+		}
+		if(i >= 1)
+		{
+			std::cout << ",";
+		}
+		std::cout << m_wheelPositions[i];
+	}
+
+	// Write multiplier
+	std::cout << "|" << m_globalGainMultiplier;
+	
+	// Write bonus
+	std::cout << "|" << m_bonus;
+
+	// Write free spins
+	std::cout << "|" << m_freeSpins;
+
+	// Write total gain
+	std::cout << "|" << (int)(m_money * (m_bonus + m_globalGainMultiplier)) << std::endl;
+
+	// Then write winning lines + gain (one line => one winning line)
+	for(int i = 0; i < (int)m_winningLines.size(); i++)
+	{
+		m_winningLines[i]->DebugPrint();
+		std::cout << "|" << m_lineGains[i] << std::endl;
+	}
+}
+
+// Print the result out explanation
+void Engine::SendResultExplanation()
+{
+	std::cout << std::endl << "The result that you will get is organized like this : " << std::endl;
+	std::cout << "<first wheel position>,<second wheel position>,....|<global multiplier>|<bonus multiplier>|<free spins>|<total gain>" << std::endl;
+	std::cout << "<x,y of the first winning line> <x2,y2 of the first winning line> ... |<gain of this line>" << std::endl;
+	std::cout << "<x,y of the second winning line> <x2,y2 of the first winning line> ... |<gain of this line>" << std::endl;
+	std::cout << "..." << std::endl;
+
+	std::cout << std::endl << "First wheel position is set for the first line, for exemple if a wheel has 5 as its position."
+	<< "It means that its 5th symbol is at the first line, its 6th at the second line, and so on..." << std::endl;
+	std::cout << "Global multiplier represents the whole result, the total gain is calculated (global multiplier * money)." << std::endl;
+	std::cout << "Bonus multiplier is the bonus result." << std::endl;
+	std::cout << "Free spins is the number of free spins." << std::endl;
+	std::cout << "Total gain is the total amount of money that the play has won." << std::endl;
+	std::cout << "x,y of a winning line represent the first coordinate of the winning line."
+	<< "(0,0) is top left corner; (maxX,0) is top right corner; (0,maxY) is bottom left corner; (maxX,maxY) is bottom right corner." << std::endl;
+
+	std::cout << std::endl << "Your current result is : " << std::endl;
 }

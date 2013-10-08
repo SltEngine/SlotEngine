@@ -118,5 +118,6 @@ void LineShapeManager::DebugPrint()
 	for(std::vector<LineShape*>::iterator line= m_lineShapes.begin(); line != m_lineShapes.end(); line++)
 	{
 		(*line)->DebugPrint();
+		std::cout << std::endl;
 	}
 }

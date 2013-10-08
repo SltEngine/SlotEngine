@@ -45,7 +45,7 @@ bool LineShape::SetLineCells(std::string lineInfo)
 	Config* config = Config::GetInst();
 	
 	// The number of cell is wrong => error
-	if(config->GetNumOfWheels() != cellValues->size())
+	if(config->GetNumOfWheels() != (int)cellValues->size())
 	{
 		DeleteVector(&cellValues);
 		return false;
@@ -108,5 +108,4 @@ void LineShape::DebugPrint()
 		// Display cell value
 		std::cout << (*cell)->x << "," << (*cell)->y << " ";
 	}
-	std::cout << std::endl;
 }
