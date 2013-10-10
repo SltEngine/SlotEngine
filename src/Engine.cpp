@@ -109,6 +109,8 @@ void Engine::ComputeGainMultiplier()
 			Wheel * wheel = WheelManager::GetInst()->GetWheel((*cell)->x);
 			if(wheel == NULL)
 			{
+				// Free memory
+				delete[] numOfOccurrences;
 				std::cerr << "Error in Engine ComputeGainMultiplier, could not get correct wheel" << std::endl;
 				return;
 			}
@@ -120,6 +122,8 @@ void Engine::ComputeGainMultiplier()
 			Symbol* currentSymbol = SymbolManager::GetInst()->GetSymbol(symbolId);
 			if(currentSymbol == NULL)
 			{
+				// Free memory
+				delete[] numOfOccurrences;
 				std::cerr << "Error in ComputeGainMultiplier. Symbol not found " << symbolId << std::endl;
 				return;
 			}
@@ -178,6 +182,8 @@ void Engine::ComputeGainMultiplier()
 			if(wheel == NULL)
 			{
 				std::cerr << "Error in Engine ComputeGainMultiplier, could not get correct wheel" << std::endl;
+				// Free memory
+				delete[] numOfOccurrences;
 				return;
 			}
 
@@ -189,6 +195,8 @@ void Engine::ComputeGainMultiplier()
 			if(currentSymbol == NULL)
 			{
 				std::cerr << "Error in ComputeGainMultiplier. Symbol not found " << symbolID << std::endl;
+				// Free memory
+				delete[] numOfOccurrences;
 				return;
 			}
 
@@ -205,6 +213,9 @@ void Engine::ComputeGainMultiplier()
 			}
 		}
 	}
+
+	// Free memory
+	delete[] numOfOccurrences;
 }
 
 // Print the result out

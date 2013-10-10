@@ -82,7 +82,7 @@ bool Config::LoadConfig()
 void Config::DeleteSingleton()
 {
 	// IF it is  instancied => delete
-	if(m_instance == 0)
+	if(m_instance != 0)
 	{
 		delete this;
 		m_instance = 0;
