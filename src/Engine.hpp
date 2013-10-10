@@ -36,8 +36,6 @@ private:
 
 	// Set the wheel positions randomly
 	void SetWheelPositions();
-	// Update the global gain multiplier
-	void ComputeGainMultiplier();
 public:
 	// Main constructor
 	Engine(int moneyInput);
@@ -50,6 +48,16 @@ public:
 	void SendResult();
 	// Print the result out explanation
 	void SendResultExplanation();
+	// Update the global gain multiplier
+	void ComputeGainMultiplier(bool saveWinningLines = false);
+
+	// Get multiplier
+	const int& GetMultiplier();
+	// Get multiplier
+	const int& GetBonus();
+	
+	// Compute RTE
+	float ComputeRTE();
 };
 
 

@@ -24,10 +24,7 @@ Engine::Engine(int moneyInput)
 	m_wheelPositions = new int[Config::GetInst()->GetNumOfWheels()];
 	SetWheelPositions();
 	
-	m_bonus = m_freeSpins = 0;
-	// Update the global gain multiplier
-	m_globalGainMultiplier = 0;
- 	ComputeGainMultiplier();
+ 	ComputeGainMultiplier(true);
 }
 
 // Main destructor
@@ -77,8 +74,13 @@ void Engine::DebugPrint()
 }
 
 // Update the global gain multiplier
-void Engine::ComputeGainMultiplier()
+void Engine::ComputeGainMultiplier(bool saveWinningLines)
 {
+	// Set up to zero at start
+	m_bonus = m_freeSpins = 0;
+	// Update the global gain multiplier
+	m_globalGainMultiplier = 0;
+
 	// First get the line shape manager
 	LineShapeManager* LSM = LineShapeManager::GetInst();
 
@@ -161,11 +163,15 @@ void Engine::ComputeGainMultiplier()
 		// If this is a winning line
 		if(toAdd)
 		{
-			// Save the winning line
-			m_winningLines.push_back(*line);
 			m_globalGainMultiplier += toAdd;
-			// Save the line gain
-			m_lineGains.push_back(toAdd);
+
+			if(saveWinningLines)
+			{
+				// Save the line gain
+				m_lineGains.push_back(toAdd);
+				// Save the winning line
+				m_winningLines.push_back(*line);
+			}
 		}
 		
 		// Reset num of occurrences
@@ -276,4 +282,47 @@ void Engine::SendResultExplanation()
 	<< "(0,0) is top left corner; (maxX,0) is top right corner; (0,maxY) is bottom left corner; (maxX,maxY) is bottom right corner." << std::endl;
 
 	std::cout << std::endl << "Your current result is : " << std::endl;
+}
+
+// Get multiplier
+const int& Engine::GetMultiplier()
+{
+	return m_globalGainMultiplier;
+}
+
+// Get multiplier
+const int& Engine::GetBonus()
+{
+	return m_bonus;
+}
+
+// Compute RTE
+float Engine::ComputeRTE()
+{
+	// Number of distinct wheel positions
+	long int wheelPositions = 1;
+	for(int i = 0; i < Config::GetInst()->GetNumOfWheels(); i++)
+	{
+		wheelPositions = wheelPositions * Config::GetInst()->GetNumOfSymbols();
+	}
+	
+	// Set positions and compute result
+	float totalResult = 0;
+	for(long int k = 0; k < wheelPositions; k++)
+	{
+		int wheelPos = k;
+		for(int i = 0; i < Config::GetInst()->GetNumOfWheels(); i++)
+		{
+			m_wheelPositions[i] = wheelPos % Config::GetInst()->GetNumOfSymbols();
+			wheelPos /= Config::GetInst()->GetNumOfSymbols();
+		}
+
+		// Compute gain
+		ComputeGainMultiplier();
+		// Add to totalResult
+		totalResult += GetMultiplier() + GetBonus();
+	}
+
+	// Return result
+	return totalResult/wheelPositions;
 }

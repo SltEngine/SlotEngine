@@ -21,6 +21,8 @@
 
 // Trace enabled ?
 static bool g_trace = false;
+// RTE enabled ?
+static bool g_rte = false;
 
 // Display instruction if args are wrong
 void DisplayInfos(char* progName)
@@ -29,6 +31,7 @@ void DisplayInfos(char* progName)
 	std::cout << "Money should be a positive number !" << std::endl;
 	std::cout << "Flags : " << std::endl << " no flags : it display standart output which can be used in the php page." << std::endl;
 	std::cout << "-t : to display trace (Warning !! You cannot use this for your php page)." << std::endl;
+	std::cout << "-rte : to display rte of your setup (Warning !! You cannot use this for your php page)." << std::endl;
 }
 
 // Entry point of the slot machine engine
@@ -55,6 +58,11 @@ int main(int argc, char**argv)
 				if(strncmp(argv[i], "-t", 2) == 0)
 				{
 					g_trace = true;
+				}
+				// RTE enabled
+				else if(strncmp(argv[i], "-rte", 4) == 0)
+				{
+					g_rte = true;
 				}
 			}
 			// Money input
@@ -177,10 +185,17 @@ int main(int argc, char**argv)
 		engine->DebugPrint();
 		engine->SendResultExplanation();
 	}
-
+	
 	// Display the output for php page
 	engine->SendResult();
-
+	
+	// Display RTE
+	if(g_rte)
+	{	
+		std::cout << "Computing RTE..." << std::endl;
+		std::cout << "RTE = " << engine->ComputeRTE() << std::endl;
+	}	
+	
 	// Delete all Singletons at the end of the main
 	config->DeleteSingleton();
 	LSM->DeleteSingleton();
