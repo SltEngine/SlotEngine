@@ -326,3 +326,34 @@ float Engine::ComputeRTE()
 	// Return result
 	return totalResult/wheelPositions;
 }
+
+// Compute Variance
+float Engine::ComputeVariance(float average)
+{
+	// Number of distinct wheel positions
+	long int wheelPositions = 1;
+	for(int i = 0; i < Config::GetInst()->GetNumOfWheels(); i++)
+	{
+		wheelPositions = wheelPositions * Config::GetInst()->GetNumOfSymbols();
+	}
+	
+	// Set positions and compute result
+	float totalVariance = 0;
+	for(long int k = 0; k < wheelPositions; k++)
+	{
+		int wheelPos = k;
+		for(int i = 0; i < Config::GetInst()->GetNumOfWheels(); i++)
+		{
+			m_wheelPositions[i] = wheelPos % Config::GetInst()->GetNumOfSymbols();
+			wheelPos /= Config::GetInst()->GetNumOfSymbols();
+		}
+
+		// Compute gain
+		ComputeGainMultiplier();
+		// Add to totalVariance
+		totalVariance += (average - GetMultiplier() + GetBonus()) * (average - GetMultiplier() + GetBonus());
+	}
+
+	// Return result
+	return totalVariance/wheelPositions;
+}

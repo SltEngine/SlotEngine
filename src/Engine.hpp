@@ -58,6 +58,9 @@ public:
 	
 	// Compute RTE
 	float ComputeRTE();
+	
+	// Compute Variance
+	float ComputeVariance(float average);
 };
 
 

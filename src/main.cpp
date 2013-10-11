@@ -23,6 +23,8 @@
 static bool g_trace = false;
 // RTE enabled ?
 static bool g_rte = false;
+// Variable enabled ?
+static bool g_var = false;
 
 // Display instruction if args are wrong
 void DisplayInfos(char* progName)
@@ -32,6 +34,7 @@ void DisplayInfos(char* progName)
 	std::cout << "Flags : " << std::endl << " no flags : it display standart output which can be used in the php page." << std::endl;
 	std::cout << "-t : to display trace (Warning !! You cannot use this for your php page)." << std::endl;
 	std::cout << "-rte : to display rte of your setup (Warning !! You cannot use this for your php page)." << std::endl;
+	std::cout << "-v : to display variance of your setup (Warning !! You cannot use this for your php page)." << std::endl;
 }
 
 // Entry point of the slot machine engine
@@ -63,6 +66,11 @@ int main(int argc, char**argv)
 				else if(strncmp(argv[i], "-rte", 4) == 0)
 				{
 					g_rte = true;
+				}
+				// Variance enabled
+				else if(strncmp(argv[i], "-v", 2) == 0)
+				{
+					g_var = true;
 				}
 			}
 			// Money input
@@ -190,7 +198,15 @@ int main(int argc, char**argv)
 	engine->SendResult();
 	
 	// Display RTE
-	if(g_rte)
+	if(g_var)
+	{
+		std::cout << "Computing RTE..." << std::endl;
+		float rte = engine->ComputeRTE();
+		std::cout << "RTE = " << rte << std::endl;
+		std::cout << "Computing Variance..." << std::endl;
+		std::cout << "Variance = " << engine->ComputeVariance(rte) << std::endl;
+	}
+	else if(g_rte)
 	{	
 		std::cout << "Computing RTE..." << std::endl;
 		std::cout << "RTE = " << engine->ComputeRTE() << std::endl;
